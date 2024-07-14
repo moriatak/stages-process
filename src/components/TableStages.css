@@ -4,3 +4,7 @@
     border: 1px solid #ffff;
     border-radius: 3px;
 }
+
+.clickable{
+    cursor: pointer;
+}

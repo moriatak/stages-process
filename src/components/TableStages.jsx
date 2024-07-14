@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faPen} from '@fortawesome/free-solid-svg-icons'
 import './TableStages.css';
 
-export default function TableStages() {
+export default function TableStages({setStageToUpdate, setOpenEditModal}) {
     const [stages, setStages] = useState([]);
 
     useEffect(() => {
@@ -56,15 +56,15 @@ export default function TableStages() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {stages.map((row) => (
+          {stages.map((row, index) => (
             <TableRow
-              key={row.name}
+              key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               {/* <TableCell component="th" scope="row">{row.TdRecKot}</TableCell> */}
               <TableCell align="right">{row.TdRecKot}</TableCell>
               <TableCell align="right">{row.TdRecDes}</TableCell>
-              <TableCell align="right">
+              <TableCell align="right" className='clickable' onClick={() => {setStageToUpdate(row); setOpenEditModal(true);}}>
                 <FontAwesomeIcon icon={faPen} style={{ margin: '0 47%' }} />
               </TableCell>
             </TableRow>
