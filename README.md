@@ -12,7 +12,7 @@
  npm run dev
 
  צד שרת נמצא ב: 
- https://tak.co.il/td/api/server.php
+ https://tak.co.il/td/api/admin/server.php
 
 מושתל ב iframe בתהליכים -> עריכת תהליך ->עריכת שלבים
 

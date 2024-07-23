@@ -5,16 +5,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faPen} from '@fortawesome/free-solid-svg-icons'
 import './TableStages.css';
 
-export default function TableStages({setStageToUpdate, setOpenEditModal}) {
+export default function TableStages({setStageToUpdate, setOpenEditModal, haveChange}) {
     const [stages, setStages] = useState([]);
 
     useEffect(() => {
         fetchDatatStagesProcess();
-    }, [])
+    }, [haveChange])
 
     const fetchDatatStagesProcess = async () => {
         const apiKey = "7sKFf8@Af:+v4Ym|Ef*L^$8";
-        const apiUrl = "https://tak.co.il/td/api/server.php";
+        const apiUrl = "https://tak.co.il/td/api/admin/server.php";
         const formData = new FormData();
         formData.append("get_stages_of_process", "true");
         formData.append("apiKey", apiKey);

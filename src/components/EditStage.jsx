@@ -1,14 +1,21 @@
 
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './EditStage.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+// import ChooseCompaing from './ChooseCompaing';
 
-function EditStage({stageToUpdate, closeModal}) {
+
+function EditStage({stageToUpdate, closeModal, setHaveChange}) {
     const [formData, setFormData] = useState(stageToUpdate);
     const [isDelete, setIsDelete] = useState(false);
     
+    useEffect(()=>{
+        setHaveChange(false);
+    },[])
     const nameRegex = /^[a-zA-Z\s\u0590-\u05FF]+$/; // Only letters, spaces, and Hebrew characters allowed
     const [nameError, setNameError] = useState('');
   
@@ -36,12 +43,53 @@ function EditStage({stageToUpdate, closeModal}) {
         setNameError(true);
         return;
       }
-      updateDetailsField(formData); 
+      updatestage(formData); 
     //   closeModal();
     }
+
+    // const handleClickLink = () => {
+    //     if (formData.TdRecLink) {
+    //         window.open(formData.TdRecLink, '_blank'); // Open the link in a new tab
+    //     }
+    // };
+
+    const updatestage = async() => {
+        const apiKey = "7sKFf8@Af:+v4Ym|Ef*L^$8";
+        const apiUrl = "https://tak.co.il/td/api/admin/server.php";
+        const formDataToserver = new FormData();
+        formDataToserver.append("updateStage", "true");
+        formDataToserver.append("apiKey", apiKey);
+        formDataToserver.append("stage", JSON.stringify(formData));
+        const searchParams = new URLSearchParams(window.location.search);
+        const p_id = searchParams.get('p_id');
+        console.log("stage: ", formData);
+        formDataToserver.append("p_id", p_id);
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: "POST", body: formDataToserver,
+            });
+            if (response.ok) {
+                const jsonResponse = await response.json();
+                if (jsonResponse.success == true) {
+                    // if in process, set data stages
+                    setHaveChange(true);
+                    closeModal();
+                } else {
+                    // setErrorTokenPersonal(true);
+                }
+            } else {                
+                // setErrorTokenPersonal(true);
+            }
+        } catch (error) {
+            console.log("error", error);
+            // setErrorTokenPersonal(true);
+        }
+    }
+
   return (
     <div className="container-modal">
-      <div className="content-modal" style={{margin: "20vh auto"}}>
+      <div className="content-modal">
         <p>אנא מלאו פרטים על שדה זה</p>
         <form>
           <div className="form-group">
@@ -49,7 +97,7 @@ function EditStage({stageToUpdate, closeModal}) {
             <input
               type="text"
               id="name"
-              name="name"
+              name="TdRecKot"
               value={formData.TdRecKot}
               onChange={handleInputChange}
               className="form-input"
@@ -61,7 +109,7 @@ function EditStage({stageToUpdate, closeModal}) {
             <input
               type="text"
               id="name"
-              name="name"
+              name="TdRecDes"
               value={formData.TdRecDes}
               onChange={handleInputChange}
               className="form-input"
@@ -84,14 +132,25 @@ function EditStage({stageToUpdate, closeModal}) {
           </div>
 
           <div className="form-group">
-            {formData.TdSugRec >=0 && (formData.TdSugRec == 1 ? 
+            {formData.TdSugRec >=0 && (formData.TdSugRec == 0 ? 
             <div>
-                <label htmlFor="type" className="form-label">בחירת מסמך לחתימה:</label> 
+                {!formData.TdRecLink ? 
+                <div>קישור לדף הנבחר: <span className='clickable-link' onClick={handleClickLink}>{formData.TdRecLink}</span></div> :
+                <div>
+                    <label htmlFor="type" className="form-label">בחירת מסמך לחתימה:</label> 
+                   {/* <ChooseCompaing /> */}
                 <div>רשימת הקמפיינים של החברה</div>
+                </div>}
             </div> :
             <div>
-                <label htmlFor="type" className="form-label">בחירת דף נחיתה:</label>
-                <div>רשימת תהתבניות של החברה</div>
+                {!!formData.TdSetR_ID ? 
+                <div>צורף מסמך לחתימה</div> :
+                <div>
+                    <label htmlFor="type" className="form-label">בחירת דף נחיתה:</label>
+                <div>רשימת התבניות של החברה</div>
+                </div>}
+
+                
             </div>
             )}
           </div>

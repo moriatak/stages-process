@@ -13,7 +13,7 @@
   
 .content-modal {
 background-color: white;
-margin: 35vh auto;
+margin: 3vh auto;
 padding: 20px;
 border: 1px solid #ccc;
 border-radius: 5px;
@@ -119,7 +119,7 @@ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 
   /* Input fields */
   .form-select {
-    width: 99%;
+    width: 97%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -127,6 +127,15 @@ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     outline: none;
   }
 
+.clickable-link {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.Mui-Autocomplete{
+    width: 97% !important;
+}
 
   /* todo check if need */
 
