@@ -4,15 +4,12 @@ import { useEffect, useState } from 'react'
 import './EditStage.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-// import ChooseCompaing from './ChooseCompaing';
-
+import ChooseCompaing from './ChooseCompaing';
 
 function EditStage({stageToUpdate, closeModal, setHaveChange}) {
     const [formData, setFormData] = useState(stageToUpdate);
     const [isDelete, setIsDelete] = useState(false);
-    
+
     useEffect(()=>{
         setHaveChange(false);
     },[])
@@ -29,9 +26,8 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
         if(value < 0) return;
         setFormData({ ...formData, [name]: value });
       };
-    const handleCheckboxChange = (e) => {
-      const { name, checked } = e.target;
-      setFormData({ ...formData, [name]: checked });
+    const handleChangeLinkCompaing = (token) => {
+      setFormData({ ...formData, ['TdRecLink']: "https://tak.co.il/new/?t=" + token.trim() });
     };
   
     const closeModalIsDelet = (isCloseAllModal = false) => {
@@ -46,12 +42,6 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
       updatestage(formData); 
     //   closeModal();
     }
-
-    // const handleClickLink = () => {
-    //     if (formData.TdRecLink) {
-    //         window.open(formData.TdRecLink, '_blank'); // Open the link in a new tab
-    //     }
-    // };
 
     const updatestage = async() => {
         const apiKey = "7sKFf8@Af:+v4Ym|Ef*L^$8";
@@ -87,10 +77,10 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
         }
     }
 
-  return (
+    return (
     <div className="container-modal">
       <div className="content-modal">
-        <p>אנא מלאו פרטים על שדה זה</p>
+        <p>עריכת שלב:</p>
         <form>
           <div className="form-group">
             <label htmlFor="name" className="form-label">שם:</label>
@@ -134,13 +124,7 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
           <div className="form-group">
             {formData.TdSugRec >=0 && (formData.TdSugRec == 0 ? 
             <div>
-                {!formData.TdRecLink ? 
-                <div>קישור לדף הנבחר: <span className='clickable-link' onClick={handleClickLink}>{formData.TdRecLink}</span></div> :
-                <div>
-                    <label htmlFor="type" className="form-label">בחירת מסמך לחתימה:</label> 
-                   {/* <ChooseCompaing /> */}
-                <div>רשימת הקמפיינים של החברה</div>
-                </div>}
+                <ChooseCompaing valueExist={formData.TdRecLink && formData.TdRecLink.split("?t=")[1]} handleChangeLinkCompaing={handleChangeLinkCompaing}/>
             </div> :
             <div>
                 {!!formData.TdSetR_ID ? 
