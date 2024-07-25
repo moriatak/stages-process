@@ -5,6 +5,7 @@ import './EditStage.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import ChooseCompaing from './ChooseCompaing';
+import Modal from './Modal';
 
 function EditStage({stageToUpdate, closeModal, setHaveChange}) {
     const [formData, setFormData] = useState(stageToUpdate);
@@ -79,6 +80,39 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
         }
     }
 
+    const deleteStage = async(stageId) => {
+      const apiKey = "7sKFf8@Af:+v4Ym|Ef*L^$8";
+      const apiUrl = "https://tak.co.il/td/api/admin/server.php";
+      const formDataToserver = new FormData();
+      formDataToserver.append("deleteStage", "true");
+      formDataToserver.append("apiKey", apiKey);
+      formDataToserver.append("stage_id", stageId);
+      const searchParams = new URLSearchParams(window.location.search);
+      const p_id = searchParams.get('p_id');
+      formDataToserver.append("p_id", p_id);
+
+      try {
+          const response = await fetch(apiUrl, {
+              method: "POST", body: formDataToserver,
+          });
+          if (response.ok) {
+              const jsonResponse = await response.json();
+              if (jsonResponse.success == true) {
+                  // if in process, set data stages
+                  setHaveChange(true);
+                  closeModal();
+              } else {
+                  // setErrorTokenPersonal(true);
+              }
+          } else {                
+              // setErrorTokenPersonal(true);
+          }
+      } catch (error) {
+          console.log("error", error);
+          // setErrorTokenPersonal(true);
+      }
+  }
+
     return (
     <div className="container-modal">
       <div className="content-modal">
@@ -150,13 +184,13 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
           </div>
         </div>
       </div>
-      {/* {isDelete && <Modal
+      {isDelete && <Modal
         closeModal={closeModalIsDelet}
-        actionModal={deleteField}
-        paramsToAction={formData.id}
+        actionModal={deleteStage}
+        paramsToAction={formData.TdSetR_ID}
         title={'מחיקה'}
-        text={'האם אתה בטוח שברצונך למחוק שדה זה?'}
-        textActionButton={'מחק'} />} */}
+        text={'האם אתה בטוח שברצונך למחוק שלב זה?'}
+        textActionButton={'מחק'} />}
 
     </div>
 
