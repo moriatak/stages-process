@@ -1,6 +1,6 @@
 
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './EditStage.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -9,6 +9,7 @@ import ChooseCompaing from './ChooseCompaing';
 function EditStage({stageToUpdate, closeModal, setHaveChange}) {
     const [formData, setFormData] = useState(stageToUpdate);
     const [isDelete, setIsDelete] = useState(false);
+    const isAddNew = useMemo(() => !formData.hasOwnProperty('TdSetR_ID'), [formData])
 
     useEffect(()=>{
         setHaveChange(false);
@@ -19,13 +20,10 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
     const handleInputChange = (e) => {
       const { name, value } = e.target;
       if(nameError) setNameError(false);
+      if(name == "TdSugRec" && value < 0) return;
       setFormData({ ...formData, [name]: value });
     };
-    const handleInpuTypeChange = (e) => {
-        const { name, value } = e.target;
-        if(value < 0) return;
-        setFormData({ ...formData, [name]: value });
-      };
+
     const handleChangeLinkCompaing = (token) => {
       setFormData({ ...formData, ['TdRecLink']: "https://tak.co.il/new/?t=" + token.trim() });
     };
@@ -47,7 +45,11 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
         const apiKey = "7sKFf8@Af:+v4Ym|Ef*L^$8";
         const apiUrl = "https://tak.co.il/td/api/admin/server.php";
         const formDataToserver = new FormData();
-        formDataToserver.append("updateStage", "true");
+        if(isAddNew){
+          formDataToserver.append("addNewStage", "true");
+        } else {
+          formDataToserver.append("updateStage", "true");
+        }
         formDataToserver.append("apiKey", apiKey);
         formDataToserver.append("stage", JSON.stringify(formData));
         const searchParams = new URLSearchParams(window.location.search);
@@ -80,7 +82,7 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
     return (
     <div className="container-modal">
       <div className="content-modal">
-        <p>עריכת שלב:</p>
+        <div>{isAddNew ? `הוספת` : `עריכת`} שלב:</div>
         <form>
           <div className="form-group">
             <label htmlFor="name" className="form-label">שם:</label>
@@ -110,9 +112,9 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
             <label htmlFor="type" className="form-label">סוג השלב:</label>
             <select
               id="type"
-              name="type"
+              name="TdSugRec"
               value={formData.TdSugRec}
-              onChange={handleInpuTypeChange}
+              onChange={handleInputChange}
               className="form-select"
             >
               <option value="-1">בחר סוג</option>
@@ -122,20 +124,20 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
           </div>
 
           <div className="form-group">
-            {formData.TdSugRec >=0 && (formData.TdSugRec == 0 ? 
-            <div>
-                <ChooseCompaing valueExist={formData.TdRecLink && formData.TdRecLink.split("?t=")[1]} handleChangeLinkCompaing={handleChangeLinkCompaing}/>
-            </div> :
-            <div>
-                {!!formData.TdSetR_ID ? 
-                <div>צורף מסמך לחתימה</div> :
-                <div>
-                    <label htmlFor="type" className="form-label">בחירת דף נחיתה:</label>
-                <div>רשימת התבניות של החברה</div>
-                </div>}
-
-                
-            </div>
+            {formData.TdSugRec >=0 && 
+            (formData.TdSugRec == 0 ? 
+              <div>
+                  <ChooseCompaing valueExist={formData.TdRecLink && formData.TdRecLink.split("?t=")[1]} handleChangeLinkCompaing={handleChangeLinkCompaing}/>
+              </div> :
+              <div>
+                  {!!formData.TdSetR_ID ? 
+                      <div>צורף מסמך לחתימה</div> :
+                      <div>
+                          <label htmlFor="type" className="form-label">בחירת דף נחיתה:</label>
+                          <div>רשימת התבניות של החברה</div>
+                      </div>
+                  } 
+              </div>
             )}
           </div>
         

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
-import './App.css'
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import './MainPage.css';
 import TableStages from './components/TableStages'
 import EditStage from './components/EditStage'
 // import Draggable from './try_draggable/Draggable'
@@ -36,6 +38,21 @@ function MainPage() {
 
   const closeModal = ()=>{
     setOpenEditModal(false);
+    setStageToUpdate({});
+  }
+
+  const openModalToAdd = () => {
+    setOpenEditModal(true);
+    // מעדכן את השדות של הוספת שלב
+    setStageToUpdate({
+        TdSetID: "",
+        TdSugRec: -1,
+        TdRecLink: "",
+        TdRecKod: "          ",
+        TdRecKot: "",
+        TdRecDes: ""
+    
+    })
   }
 
   return (
@@ -43,8 +60,11 @@ function MainPage() {
     {companyId ? <>
       <div className='title-home'>עריכת שלבי התהליך</div>
       <TableStages setStageToUpdate={setStageToUpdate} setOpenEditModal={setOpenEditModal} haveChange={haveChange}/>
-      {openEditModal && stageToUpdate && Object.keys(stageToUpdate).length !== 0 && 
+      {(openEditModal && stageToUpdate && Object.keys(stageToUpdate).length !== 0) && 
           <EditStage stageToUpdate={stageToUpdate} closeModal={closeModal} setHaveChange={setHaveChange}/>}
+      <Fab color="primary" className="floating-add-button" onClick={openModalToAdd}>
+        <AddIcon />
+      </Fab>
       {/* <Draggable /> */}
       </> : <>404 not found</>}
     </>

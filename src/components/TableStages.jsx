@@ -46,7 +46,7 @@ export default function TableStages({setStageToUpdate, setOpenEditModal, haveCha
     }
 
   return (
-    <TableContainer component={Paper} dir="rtl">
+    <TableContainer component={Paper} dir="rtl" className='table-container'>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow className='MuiTableHead-title'>

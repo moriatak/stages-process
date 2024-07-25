@@ -1,0 +1,16 @@
+.floating-add-button{
+    background-color: #004826a1 !important;
+    position: fixed !important;
+    left: 5%;
+    bottom: 5%;
+    z-index: 99 !important;
+}
+.floating-add-button:hover{
+    background-color: #072115a1 !important;
+}
+
+.title-home{
+    font-size: 25px;
+    font-weight: bold;
+    margin: 2vw;
+  }

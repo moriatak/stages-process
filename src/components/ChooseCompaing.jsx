@@ -8,7 +8,7 @@ function ChooseCompaing({valueExist, handleChangeLinkCompaing}) {
     const [loading, setLoading] = useState(true);
     const [listCompanig, setListCompanig] = useState([]);
     const [compaingChoosen, setCompaingChoosen] = useState({Name: 'בחר מהרשימה'});
-    const linkToCompingChoosen = useMemo(() => `https://tak.co.il/new/?t=${compaingChoosen && compaingChoosen.Token}`, [compaingChoosen]);
+    const linkToCompingChoosen = useMemo(() => (compaingChoosen && compaingChoosen.Token) ? `https://tak.co.il/new/?t=${compaingChoosen.Token}` : '', [compaingChoosen]);
     const { companyId } = useData();
     
     useEffect(()=>{
@@ -63,7 +63,9 @@ function ChooseCompaing({valueExist, handleChangeLinkCompaing}) {
             value={compaingChoosen}
             onChange={(event, newValue) => {
               setCompaingChoosen(newValue);
-              handleChangeLinkCompaing(newValue.Token);
+              if(newValue && newValue.Token){
+                handleChangeLinkCompaing(newValue.Token);
+              }
             }}
             // inputValue={inputValue}
             // onInputChange={(event, newInputValue) => {
@@ -79,7 +81,7 @@ function ChooseCompaing({valueExist, handleChangeLinkCompaing}) {
             sx={{ width: 300 }}
             renderInput={(params) => <TextField {...params} label="רשימת קמפיינים" />}
           />
-          <div style={{ 'text-align': 'end', width: '97%' }}>קישור לדף הנבחר: <span className='clickable-link' onClick={()=> handleClickLink(linkToCompingChoosen)}>{linkToCompingChoosen}</span>  </div>
+      {(linkToCompingChoosen && linkToCompingChoosen != '') && <div style={{ 'textAlign': 'end', width: '97%' }}>קישור לדף הנבחר: <span className='clickable-link' onClick={()=> handleClickLink(linkToCompingChoosen)}>{linkToCompingChoosen}</span>  </div>}
         <div>רוצה ליצור קמפיין חדש? <span className='clickable-link' onClick={()=>handleClickLink('https://portal.tak.co.il/admin.php?act=Compaing')}>לחץ כאן</span></div>
       </div>
       }

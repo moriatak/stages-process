@@ -1,10 +1,18 @@
 .MuiTableHead-title th{
     color: #ffff;
-    background-color: #004826a1;
+    background-color: #688C76;
     border: 1px solid #ffff;
     border-radius: 3px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .clickable{
     cursor: pointer;
+}
+
+.table-container {
+    max-height: 84vh; 
+    overflow-y: auto;
 }
