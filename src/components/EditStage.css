@@ -143,3 +143,10 @@ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 .modal-draft-content.show {
     animation: fadeIn 0.3s;
 }
+
+.hideen-button{
+  color: #fff;
+  /* cursor: move; //default */
+  cursor: not-allowed;
+  pointer-events: none;
+}

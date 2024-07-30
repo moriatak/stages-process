@@ -67,7 +67,13 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
                 if (jsonResponse.success == true) {
                     // if in process, set data stages
                     setHaveChange(true);
-                    closeModal();
+                    //  אם זה שדה חדש מסוג מסמך לחתימה, מעביר למסך הוספת המסמך
+                    // TdSugRec == "1" סוג שלב - מסמך לחתימה
+                    if(formData.TdSugRec == "1" && jsonResponse.stageIdNew){
+                      window.parent.postMessage({ movePDFEdit: true, stageId:jsonResponse.stageIdNew }, "https://portal.tak.co.il");
+                    } else {
+                      closeModal();
+                    }
                 } else {
                     // setErrorTokenPersonal(true);
                 }
@@ -164,11 +170,15 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
                   <ChooseCompaing valueExist={formData.TdRecLink && formData.TdRecLink.split("?t=")[1]} handleChangeLinkCompaing={handleChangeLinkCompaing}/>
               </div> :
               <div>
-                  {!!formData.TdSetR_ID ? 
-                      <div>צורף מסמך לחתימה</div> :
+                  {!!formData.TdRecKod.trim() ? 
+                      <div>צורף מסמך לחתימה 
+                        <span className='clickable-link' 
+                        onClick={()=> {window.parent.postMessage({ movePDFEdit: true, mpId:formData.TdRecKod }, "https://portal.tak.co.il");}}
+                        >לעריכת ה PDF לחץ כאן </span>
+                      </div> :
                       <div>
-                          <label htmlFor="type" className="form-label">בחירת דף נחיתה:</label>
-                          <div>רשימת התבניות של החברה</div>
+                          {/* <label htmlFor="type" className="form-label">בחירת דף נחיתה:</label> */}
+                          {/* <div>רשימת התבניות של החברה</div> */}
                       </div>
                   } 
               </div>
@@ -179,7 +189,7 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
         <div className='buttons-modal'>
           <div className="close-button" onClick={closeModal} >סגור</div>
           <div className='action-button'>
-            <FontAwesomeIcon icon={faTrash} size="lg" onClick={() => { setIsDelete(true) }} />
+            <FontAwesomeIcon icon={faTrash} size="lg" onClick={() => { setIsDelete(true) }} className={`${isAddNew && "hideen-button"}`} />
             <div className="submit-button" onClick={savedFiled} >שמור</div>
           </div>
         </div>
