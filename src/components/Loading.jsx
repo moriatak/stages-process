@@ -1,12 +1,12 @@
 import React from 'react';
 import './Loading.css';
 
-function Loading() {
+function Loading({text}) {
   return (
     <div className="loading-modal">
     <div className="loading-container">
       <div className="loading-spinner"></div>
-      <p className="loading-text">שומר את המידע..</p>
+      <p className="loading-text">{text ? text : 'טוען..'}</p>
     </div>
     </div>
   );

@@ -11,9 +11,15 @@ import Loading from './Loading';
 function EditStage({stageToUpdate, closeModal, setHaveChange}) {
     const [formData, setFormData] = useState(stageToUpdate);
     const [isDelete, setIsDelete] = useState(false);
-    const [loading, setLoding] = useState(false);
     const isAddNew = useMemo(() => !formData.hasOwnProperty('TdSetR_ID'), [formData])
-
+    const [loading, setLoading] = useState(false);
+    const [textLoading, setTextLoading] = useState('');
+    
+    const updateLoding = (isShow, textShow = 'טוען..') =>{
+      setLoading(isShow);
+      setTextLoading(isShow ? textShow : '');
+    }
+    
     useEffect(()=>{
         setHaveChange(false);
     },[])
@@ -45,7 +51,7 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
     }
 
     const updatestage = async() => {
-      setLoding(true);
+      updateLoding(true, 'שומר את המידע..');
       const apiKey = "7sKFf8@Af:+v4Ym|Ef*L^$8";
       const apiUrl = "https://tak.co.il/td/api/admin/server.php";
       const formDataToserver = new FormData();
@@ -76,25 +82,25 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
                     window.parent.postMessage({ movePDFEdit: true, stageId:jsonResponse.stageIdNew }, "https://portal.tak.co.il");
                   } else {
                     closeModal();
-                    setLoding(false);
+                    updateLoding(false);
                   }
               } else {
                   // setErrorTokenPersonal(true);
-                  setLoding(false);
+                  updateLoding(false);
               }
           } else {                
               // setErrorTokenPersonal(true);
-              setLoding(false);
+              updateLoding(false);
           }
       } catch (error) {
           console.log("error", error);
           // setErrorTokenPersonal(true);
-          setLoding(false);
+          updateLoding(false);
       }
     }
 
     const deleteStage = async(stageId) => {
-      setLoding(true);
+      updateLoding(true, 'מוחק את השלב..');
       const apiKey = "7sKFf8@Af:+v4Ym|Ef*L^$8";
       const apiUrl = "https://tak.co.il/td/api/admin/server.php";
       const formDataToserver = new FormData();
@@ -121,11 +127,11 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
           } else {                
               // setErrorTokenPersonal(true);
           }
-          setLoding(false);
+          updateLoding(false);
       } catch (error) {
           console.log("error", error);
           // setErrorTokenPersonal(true);
-          setLoding(false);
+          updateLoding(false);
       }
   }
 
@@ -211,7 +217,7 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
         title={'מחיקה'}
         text={'האם אתה בטוח שברצונך למחוק שלב זה?'}
         textActionButton={'מחק'} />}
-      {loading && <Loading />}
+      {loading && <Loading text={textLoading}/>}
     </div>
 
   );
