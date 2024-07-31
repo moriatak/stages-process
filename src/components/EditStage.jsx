@@ -6,10 +6,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import ChooseCompaing from './ChooseCompaing';
 import Modal from './Modal';
+import Loading from './Loading';
 
 function EditStage({stageToUpdate, closeModal, setHaveChange}) {
     const [formData, setFormData] = useState(stageToUpdate);
     const [isDelete, setIsDelete] = useState(false);
+    const [loading, setLoding] = useState(false);
     const isAddNew = useMemo(() => !formData.hasOwnProperty('TdSetR_ID'), [formData])
 
     useEffect(()=>{
@@ -43,50 +45,56 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
     }
 
     const updatestage = async() => {
-        const apiKey = "7sKFf8@Af:+v4Ym|Ef*L^$8";
-        const apiUrl = "https://tak.co.il/td/api/admin/server.php";
-        const formDataToserver = new FormData();
-        if(isAddNew){
-          formDataToserver.append("addNewStage", "true");
-        } else {
-          formDataToserver.append("updateStage", "true");
-        }
-        formDataToserver.append("apiKey", apiKey);
-        formDataToserver.append("stage", JSON.stringify(formData));
-        const searchParams = new URLSearchParams(window.location.search);
-        const p_id = searchParams.get('p_id');
-        console.log("stage: ", formData);
-        formDataToserver.append("p_id", p_id);
+      setLoding(true);
+      const apiKey = "7sKFf8@Af:+v4Ym|Ef*L^$8";
+      const apiUrl = "https://tak.co.il/td/api/admin/server.php";
+      const formDataToserver = new FormData();
+      if(isAddNew){
+        formDataToserver.append("addNewStage", "true");
+      } else {
+        formDataToserver.append("updateStage", "true");
+      }
+      formDataToserver.append("apiKey", apiKey);
+      formDataToserver.append("stage", JSON.stringify(formData));
+      const searchParams = new URLSearchParams(window.location.search);
+      const p_id = searchParams.get('p_id');
+      console.log("stage: ", formData);
+      formDataToserver.append("p_id", p_id);
 
-        try {
-            const response = await fetch(apiUrl, {
-                method: "POST", body: formDataToserver,
-            });
-            if (response.ok) {
-                const jsonResponse = await response.json();
-                if (jsonResponse.success == true) {
-                    // if in process, set data stages
-                    setHaveChange(true);
-                    //  אם זה שדה חדש מסוג מסמך לחתימה, מעביר למסך הוספת המסמך
-                    // TdSugRec == "1" סוג שלב - מסמך לחתימה
-                    if(formData.TdSugRec == "1" && jsonResponse.stageIdNew){
-                      window.parent.postMessage({ movePDFEdit: true, stageId:jsonResponse.stageIdNew }, "https://portal.tak.co.il");
-                    } else {
-                      closeModal();
-                    }
-                } else {
-                    // setErrorTokenPersonal(true);
-                }
-            } else {                
-                // setErrorTokenPersonal(true);
-            }
-        } catch (error) {
-            console.log("error", error);
-            // setErrorTokenPersonal(true);
-        }
+      try {
+          const response = await fetch(apiUrl, {
+              method: "POST", body: formDataToserver,
+          });
+          if (response.ok) {
+              const jsonResponse = await response.json();
+              if (jsonResponse.success == true) {
+                  // if in process, set data stages
+                  setHaveChange(true);
+                  //  אם זה שדה חדש מסוג מסמך לחתימה, מעביר למסך הוספת המסמך
+                  // TdSugRec == "1" סוג שלב - מסמך לחתימה
+                  if(formData.TdSugRec == "1" && jsonResponse.stageIdNew){
+                    window.parent.postMessage({ movePDFEdit: true, stageId:jsonResponse.stageIdNew }, "https://portal.tak.co.il");
+                  } else {
+                    closeModal();
+                    setLoding(false);
+                  }
+              } else {
+                  // setErrorTokenPersonal(true);
+                  setLoding(false);
+              }
+          } else {                
+              // setErrorTokenPersonal(true);
+              setLoding(false);
+          }
+      } catch (error) {
+          console.log("error", error);
+          // setErrorTokenPersonal(true);
+          setLoding(false);
+      }
     }
 
     const deleteStage = async(stageId) => {
+      setLoding(true);
       const apiKey = "7sKFf8@Af:+v4Ym|Ef*L^$8";
       const apiUrl = "https://tak.co.il/td/api/admin/server.php";
       const formDataToserver = new FormData();
@@ -113,9 +121,11 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
           } else {                
               // setErrorTokenPersonal(true);
           }
+          setLoding(false);
       } catch (error) {
           console.log("error", error);
           // setErrorTokenPersonal(true);
+          setLoding(false);
       }
   }
 
@@ -201,7 +211,7 @@ function EditStage({stageToUpdate, closeModal, setHaveChange}) {
         title={'מחיקה'}
         text={'האם אתה בטוח שברצונך למחוק שלב זה?'}
         textActionButton={'מחק'} />}
-
+      {loading && <Loading />}
     </div>
 
   );
