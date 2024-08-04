@@ -2,7 +2,8 @@ import { useState, useEffect} from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } 
     from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faPen} from '@fortawesome/free-solid-svg-icons'
+import {faPen, faFilePdf, faQuestionCircle} from '@fortawesome/free-solid-svg-icons'
+import Tooltip from '@mui/material/Tooltip';
 import './TableStages.css';
 
 export default function TableStages({setStageToUpdate, setOpenEditModal, haveChange}) {
@@ -50,6 +51,7 @@ export default function TableStages({setStageToUpdate, setOpenEditModal, haveCha
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow className='MuiTableHead-title'>
+            <TableCell align="right">סוג</TableCell>
             <TableCell align="right" >שם</TableCell>
             <TableCell align="right">מידע נוסף</TableCell>
             <TableCell align="right">פרטים נוספים</TableCell>
@@ -62,10 +64,20 @@ export default function TableStages({setStageToUpdate, setOpenEditModal, haveCha
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               {/* <TableCell component="th" scope="row">{row.TdRecKot}</TableCell> */}
+              <TableCell align="right">{row.TdSugRec == 0 ? 
+                <Tooltip title="דף נחיתה">
+                  <FontAwesomeIcon icon={faQuestionCircle}/> 
+                </Tooltip>
+                : <Tooltip title="מסמך לחתימה">
+                    <FontAwesomeIcon icon={faFilePdf} />
+                  </Tooltip>
+              }</TableCell>
               <TableCell align="right">{row.TdRecKot}</TableCell>
               <TableCell align="right">{row.TdRecDes}</TableCell>
               <TableCell align="right" className='clickable' onClick={() => {setStageToUpdate(row); setOpenEditModal(true);}}>
+              <Tooltip title="עריכה">
                 <FontAwesomeIcon icon={faPen} style={{ margin: '0 47%' }} />
+              </Tooltip>
               </TableCell>
             </TableRow>
           ))}

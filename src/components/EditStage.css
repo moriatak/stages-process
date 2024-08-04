@@ -131,6 +131,7 @@ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     color: blue;
     text-decoration: underline;
     cursor: pointer;
+    padding: 2px;
 }
 
 .Mui-Autocomplete{
