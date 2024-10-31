@@ -58,7 +58,7 @@ function MainPage() {
   return (
     <>
     {companyId ? <>
-      <div className='title-home'>עריכת שלבי התהליך</div>
+      <div className='title-home'>עריכת שלבי המעטפית</div>
       <TableStages setStageToUpdate={setStageToUpdate} setOpenEditModal={setOpenEditModal} haveChange={haveChange}/>
       {(openEditModal && stageToUpdate && Object.keys(stageToUpdate).length !== 0) && 
           <EditStage stageToUpdate={stageToUpdate} closeModal={closeModal} setHaveChange={setHaveChange}/>}

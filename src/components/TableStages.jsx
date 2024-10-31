@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faPen, faFilePdf, faQuestionCircle} from '@fortawesome/free-solid-svg-icons'
 import Tooltip from '@mui/material/Tooltip';
 import './TableStages.css';
+import logo from '../assets/tak-logo.png';
+
 
 export default function TableStages({setStageToUpdate, setOpenEditModal, haveChange}) {
     const [stages, setStages] = useState([]);
@@ -64,9 +66,10 @@ export default function TableStages({setStageToUpdate, setOpenEditModal, haveCha
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               {/* <TableCell component="th" scope="row">{row.TdRecKot}</TableCell> */}
-              <TableCell align="right">{row.TdSugRec == 0 ? 
+              <TableCell align="right" style={{ textAlign: "center", padding: "4px" }}>{row.TdSugRec == 0 ? 
                 <Tooltip title="דף נחיתה">
-                  <FontAwesomeIcon icon={faQuestionCircle}/> 
+                  <img src={logo} style={{width: "70px"}}/>
+                  {/* <FontAwesomeIcon icon={faQuestionCircle}/>  */}
                 </Tooltip>
                 : <Tooltip title="מסמך לחתימה">
                     <FontAwesomeIcon icon={faFilePdf} />
