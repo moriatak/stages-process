@@ -16,3 +16,15 @@
 
 מושתל ב iframe בתהליכים -> עריכת מעטפית ->עריכת שלבים
 
+כדי לעלות לשרת:
+
+npm run build 
+
+zip -r build.zip ./dist
+
+להכנס למיקום:
+/home/takco/public_html/app/takzivit/portal/pages/admin_page/processes/client_side
+שם להעלות את הקובץ ולעשות לו extract
+
+
+
